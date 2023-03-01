@@ -1,5 +1,8 @@
 package com.project.dungeonfinder.rpgtable;
 
+import com.project.dungeonfinder.system.System;
+import com.project.dungeonfinder.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -11,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -46,6 +50,10 @@ public class RpgTable implements Serializable {
 
   @Column(name = "platform_url", length = 280)
   private String platformUrl;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "system_id", referencedColumnName = "id")
+  private System system;
 
   @Column(name = "is_open", nullable = false)
   private boolean isOpen;
@@ -105,6 +113,14 @@ public class RpgTable implements Serializable {
 
   public void setPlatformUrl(String platformUrl) {
     this.platformUrl = platformUrl;
+  }
+
+  public System getSystem() {
+    return this.system;
+  }
+
+  public void setSystem(System system) {
+    this.system = system;
   }
 
   public boolean isOpen() {

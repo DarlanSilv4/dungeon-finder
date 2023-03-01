@@ -1,5 +1,6 @@
 package com.project.dungeonfinder.rpgtable;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.dungeonfinder.system.System;
 import com.project.dungeonfinder.user.User;
 import jakarta.persistence.CascadeType;
@@ -14,12 +15,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -55,8 +58,21 @@ public class RpgTable implements Serializable {
   @JoinColumn(name = "system_id", referencedColumnName = "id")
   private System system;
 
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(
+    name = "accounts_rpg_table",
+    joinColumns = { @JoinColumn(name = "account_id") },
+    inverseJoinColumns = { @JoinColumn(name = "rpg_table_id") }
+  )
+  @JsonManagedReference
+  private Set<User> members;
+
   @Column(name = "is_open", nullable = false)
   private boolean isOpen;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "account_id", referencedColumnName = "id")
+  private User creator;
 
   @CreationTimestamp
   @Column(
@@ -123,12 +139,28 @@ public class RpgTable implements Serializable {
     this.system = system;
   }
 
+  public Set<User> getMembers() {
+    return members;
+  }
+
+  public void setMembers(Set<User> members) {
+    this.members = members;
+  }
+
   public boolean isOpen() {
     return isOpen;
   }
 
   public void setOpen(boolean isOpen) {
     this.isOpen = isOpen;
+  }
+
+  public User getCreator() {
+    return creator;
+  }
+
+  public void setCreator(User creator) {
+    this.creator = creator;
   }
 
   public Timestamp getCreateAt() {

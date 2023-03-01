@@ -1,13 +1,18 @@
 package com.project.dungeonfinder.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.project.dungeonfinder.rpgtable.RpgTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,6 +41,14 @@ public class User implements Serializable {
   @CreationTimestamp
   @Column(name = "create_at")
   private Timestamp createAt;
+
+  @ManyToMany(mappedBy = "members")
+  @JsonBackReference
+  private Set<RpgTable> rpgTables;
+
+  @OneToMany
+  @Column(name = "rpg_tables_created")
+  private Set<RpgTable> rpgTablesCreated;
 
   public UUID getId() {
     return id;
@@ -83,5 +96,21 @@ public class User implements Serializable {
 
   public void setCreateAt(Timestamp createAt) {
     this.createAt = createAt;
+  }
+
+  public Set<RpgTable> getRpgTables() {
+    return rpgTables;
+  }
+
+  public void setRpgTables(Set<RpgTable> rpgTables) {
+    this.rpgTables = rpgTables;
+  }
+
+  public Set<RpgTable> getRpgTablesCreated() {
+    return rpgTablesCreated;
+  }
+
+  public void setRpgTablesCreated(Set<RpgTable> rpgTablesCreated) {
+    this.rpgTablesCreated = rpgTablesCreated;
   }
 }

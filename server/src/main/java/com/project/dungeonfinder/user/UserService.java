@@ -2,6 +2,8 @@ package com.project.dungeonfinder.user;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,5 +26,9 @@ public class UserService {
 
   public List<User> findAll() {
     return userRepository.findAll();
+  }
+
+  public Optional<User> findById(UUID id) {
+    return userRepository.findById(id);
   }
 }

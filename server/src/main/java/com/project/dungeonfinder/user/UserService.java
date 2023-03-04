@@ -1,6 +1,7 @@
 package com.project.dungeonfinder.user;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,5 +20,9 @@ public class UserService {
 
   public Boolean existsByEmail(String email) {
     return userRepository.existsByEmail(email);
+  }
+
+  public List<User> findAll() {
+    return userRepository.findAll();
   }
 }

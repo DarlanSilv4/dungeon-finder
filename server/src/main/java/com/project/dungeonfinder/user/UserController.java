@@ -3,10 +3,13 @@ package com.project.dungeonfinder.user;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,5 +46,18 @@ public class UserController {
   @GetMapping
   public ResponseEntity<List<User>> getListOfUsers() {
     return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+  }
+
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<Object> getUser(@PathVariable(value = "id") UUID id) {
+    Optional<User> userOptional = userService.findById(id);
+
+    if (!userOptional.isPresent()) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body(Map.entry("message", "user not found!"));
+    }
+
+    return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
   }
 }

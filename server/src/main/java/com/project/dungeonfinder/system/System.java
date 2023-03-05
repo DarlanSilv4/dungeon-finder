@@ -25,6 +25,9 @@ public class System implements Serializable {
   @Column(nullable = false, unique = true, length = 50)
   private String name;
 
+  @Column(unique = true, length = 20)
+  private String abbreviation;
+
   @OneToMany
   @Column(name = "rpg_tables")
   private List<RpgTable> rpgTables;
@@ -43,6 +46,14 @@ public class System implements Serializable {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getAbbreviation() {
+    return abbreviation;
+  }
+
+  public void setAbbreviation(String abbreviation) {
+    this.abbreviation = abbreviation;
   }
 
   public List<RpgTable> getRpgTables() {
